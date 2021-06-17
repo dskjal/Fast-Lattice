@@ -26,7 +26,7 @@ bl_info = {
     "location" : "View3D > Toolshelf > Fast Lattice",
     "description" : "",
     "warning" : "",
-    "wiki_url" : "",
+    "wiki_url" : "https://github.com/dskjal/Fast-Lattice",
     "tracker_url" : "",
     "category" : "Mesh"
 }
