@@ -34,11 +34,11 @@ bl_info = {
 vg_name = 'fast_lattice'
 
 # return [xmin, xmax, ymin, ymax, zmin, zmax]
-def get_bounding_box_world(vertices):
-    x, y, z = vertices[0].co
+def get_bounding_box_world(vertices, matrix_world):
+    x, y, z = vertices[0].co @ matrix_world
     ret = [x, x, y, y, z, z]
     for v in vertices:
-        x, y, z = v.co
+        x, y, z = v.co @ matrix_world
         if ret[0] < x: ret[0] = x
         if ret[1] > x: ret[1] = x
         if ret[2] < y: ret[2] = y
@@ -53,9 +53,9 @@ def get_bounding_box_world(vertices):
 def get_bounding_box_world_select(object):
     vertices = [v for v in object.data.vertices if v.select]
     if not vertices:
-        ret = get_bounding_box_world(object.data.vertices)
+        ret = get_bounding_box_world(vertices=object.data.vertices, matrix_world=object.matrix_world)
     else:
-        ret = get_bounding_box_world(vertices=vertices)
+        ret = get_bounding_box_world(vertices=vertices, matrix_world=object.matrix_world)
     
     return (ret, not (not vertices))
 
@@ -79,7 +79,7 @@ class DSKJAL_OT_SET_LATTICE(bpy.types.Operator):
                 bpy.ops.object.mode_set(mode='OBJECT')
 
         else:
-            aabb = get_bounding_box_world(vertices=o.data.vertices)
+            aabb = get_bounding_box_world(vertices=o.data.vertices, matrix_world=o.matrix_world)
 
         # set lattice
         bpy.ops.object.add(type='LATTICE')
